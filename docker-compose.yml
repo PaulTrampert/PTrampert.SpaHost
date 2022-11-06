@@ -10,3 +10,10 @@ services:
     - 49154:80
     volumes:
     - ./PTrampert.SpaHost/test-client/build/:/app/wwwroot/
+
+  ptrampert.spahost.sampleapi:
+    image: ${DOCKER_REGISTRY-}ptrampertspahostsampleapi
+    build:
+      context: .
+      dockerfile: PTrampert.SpaHost.SampleApi/Dockerfile
+

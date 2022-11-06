@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTrampert.SpaHost", "PTramp
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{9BAC4064-C9C6-4168-94DA-FE63C2168263}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTrampert.SpaHost.SampleApi", "PTrampert.SpaHost.SampleApi\PTrampert.SpaHost.SampleApi.csproj", "{1CD0C367-7E23-4FFB-8E8F-A1BC0AA36ACA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9BAC4064-C9C6-4168-94DA-FE63C2168263}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BAC4064-C9C6-4168-94DA-FE63C2168263}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BAC4064-C9C6-4168-94DA-FE63C2168263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CD0C367-7E23-4FFB-8E8F-A1BC0AA36ACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CD0C367-7E23-4FFB-8E8F-A1BC0AA36ACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CD0C367-7E23-4FFB-8E8F-A1BC0AA36ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CD0C367-7E23-4FFB-8E8F-A1BC0AA36ACA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

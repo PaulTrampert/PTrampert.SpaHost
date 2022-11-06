@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  ptrampert.spahost:
+    image: ${DOCKER_REGISTRY-}ptrampertspahost
+    build:
+      context: .
+      dockerfile: PTrampert.SpaHost/Dockerfile
+    ports:
+    - 49154:80
+    volumes:
+    - ./PTrampert.SpaHost/test-client/build/:/app/wwwroot/

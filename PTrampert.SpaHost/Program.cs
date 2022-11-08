@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using PTrampert.SpaHost.Configuration;
 
@@ -19,7 +19,10 @@ if (oidcConfig != null)
             opts.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             opts.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
         })
-        .AddCookie()
+        .AddCookie(opts =>
+        {
+            
+        })
         .AddOpenIdConnect(opts =>
         {
             opts.Authority = oidcConfig.Authority;
@@ -47,11 +50,37 @@ if (oidcConfig != null)
     });
 }
 
+builder.Services.Configure<ForwardedHeadersOptions>(opts =>
+{
+    var fhConfig = config.GetSection("ForwardedHeaders").Get<ForwardedHeadersConfig>();
+    opts.ForwardedHeaders = ForwardedHeaders.All;
+    opts.AllowedHosts = fhConfig.AllowedHosts.ToList();
+    opts.ForwardedForHeaderName = fhConfig.ForwardedForHeaderName;
+    opts.ForwardedHostHeaderName = fhConfig.ForwardedHostHeaderName;
+    opts.ForwardedProtoHeaderName = fhConfig.ForwardedProtoHeaderName;
+    opts.KnownNetworks.Clear();
+    foreach (var net in fhConfig.KnownNetworksParsed)
+    {
+        opts.KnownNetworks.Add(net);
+    }
+    opts.KnownProxies.Clear();
+    foreach (var proxy in fhConfig.KnownProxiesParsed)
+    {
+        opts.KnownProxies.Add(proxy);
+    }
+    opts.OriginalForHeaderName = fhConfig.OriginalForHeaderName;
+    opts.OriginalHostHeaderName = fhConfig.OriginalHostHeaderName;
+    opts.OriginalProtoHeaderName = fhConfig.OriginalProtoHeaderName;
+    opts.RequireHeaderSymmetry = fhConfig.RequireHeaderSymmetry;
+});
+
 var app = builder.Build();
 
 
 
 app.UseHttpLogging();
+
+app.UseForwardedHeaders();
 
 app.UseRouting();
 

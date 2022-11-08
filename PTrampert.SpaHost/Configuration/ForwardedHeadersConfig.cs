@@ -42,5 +42,36 @@ namespace PTrampert.SpaHost.Configuration
         public string OriginalProtoHeaderName { get; set; } = "X-Original-Proto";
 
         public bool RequireHeaderSymmetry { get; set; } = false;
+
+        public void ConfigureForwardedHeaders(ForwardedHeadersOptions opts)
+        {
+            opts.ForwardedHeaders = ForwardedHeaders.All;
+            opts.AllowedHosts = AllowedHosts.ToList();
+            opts.ForwardedForHeaderName = ForwardedForHeaderName;
+            opts.ForwardedHostHeaderName = ForwardedHostHeaderName;
+            opts.ForwardedProtoHeaderName = ForwardedProtoHeaderName;
+            if (KnownNetworksParsed.Any())
+            {
+                opts.KnownNetworks.Clear();
+                foreach (var net in KnownNetworksParsed)
+                {
+                    opts.KnownNetworks.Add(net);
+                }
+            }
+
+            if (KnownProxiesParsed.Any())
+            {
+                opts.KnownProxies.Clear();
+                foreach (var proxy in KnownProxiesParsed)
+                {
+                    opts.KnownProxies.Add(proxy);
+                }
+            }
+
+            opts.OriginalForHeaderName = OriginalForHeaderName;
+            opts.OriginalHostHeaderName = OriginalHostHeaderName;
+            opts.OriginalProtoHeaderName = OriginalProtoHeaderName;
+            opts.RequireHeaderSymmetry = RequireHeaderSymmetry;
+        }
     }
 }

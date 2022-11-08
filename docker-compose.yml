@@ -17,3 +17,5 @@ services:
       context: .
       dockerfile: PTrampert.SpaHost.SampleApi/Dockerfile
 
+  redis:
+    image: redis

@@ -2,89 +2,52 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using PTrampert.SpaHost.Configuration;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 builder.Services.AddApiProxy(builder.Configuration.GetSection("ApiProxy"));
-var oidcConfig = config.GetSection("Auth")?.Get<OidcConfig>();
+var authConfig = config.GetSection("AuthConfig")?.Get<AuthConfig>();
 var fhConfig = config.GetSection("ForwardedHeaders").Get<ForwardedHeadersConfig>();
+var redisConfig = config.GetSection("RedisConfig").Get<RedisConfig>();
 
-if (oidcConfig != null)
+if (authConfig != null)
 {
+    if (redisConfig.UseForDataProtection)
+    {
+        var redis = ConnectionMultiplexer.Connect(redisConfig.DataProtectionConnectionString);
+        builder.Services.AddDataProtection()
+            .SetApplicationName(builder.Environment.ApplicationName)
+            .PersistKeysToStackExchangeRedis(redis, $"{builder.Environment.ApplicationName}_dpapi");
+    }
+
     builder.Services.AddAuthentication(opts =>
         {
             opts.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             opts.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             opts.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
         })
-        .AddCookie(opts =>
-        {
-            
-        })
-        .AddOpenIdConnect(opts =>
-        {
-            opts.Authority = oidcConfig.Authority;
+        .AddCookie(authConfig.CookieConfig.ConfigureCookies)
+        .AddOpenIdConnect(authConfig.OidcConfig.ConfigureOidc);
 
-            opts.ClientId = oidcConfig.ClientId;
-            opts.ClientSecret = oidcConfig.ClientSecret;
-
-            opts.ResponseType = OpenIdConnectResponseType.CodeIdToken;
-            opts.ResponseMode = OpenIdConnectResponseMode.FormPost;
-
-            opts.Scope.Clear();
-            foreach (var scope in oidcConfig.Scopes)
-            {
-                opts.Scope.Add(scope);
-            }
-
-            opts.SaveTokens = true;
-        });
-
-    builder.Services.AddAuthorization(opts =>
+    if (authConfig.RequireForStaticFiles)
     {
-        opts.FallbackPolicy = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .Build();
-    });
+        builder.Services.AddAuthorization(opts =>
+        {
+            opts.FallbackPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+        });
+    }
 }
 
-builder.Services.Configure<ForwardedHeadersOptions>(opts =>
-{
-    opts.ForwardedHeaders = ForwardedHeaders.All;
-    opts.AllowedHosts = fhConfig.AllowedHosts.ToList();
-    opts.ForwardedForHeaderName = fhConfig.ForwardedForHeaderName;
-    opts.ForwardedHostHeaderName = fhConfig.ForwardedHostHeaderName;
-    opts.ForwardedProtoHeaderName = fhConfig.ForwardedProtoHeaderName;
-    if (fhConfig.KnownNetworksParsed.Any())
-    {
-        opts.KnownNetworks.Clear();
-        foreach (var net in fhConfig.KnownNetworksParsed)
-        {
-            opts.KnownNetworks.Add(net);
-        }
-    }
-
-    if (fhConfig.KnownProxiesParsed.Any())
-    {
-        opts.KnownProxies.Clear();
-        foreach (var proxy in fhConfig.KnownProxiesParsed)
-        {
-            opts.KnownProxies.Add(proxy);
-        }
-    }
-
-    opts.OriginalForHeaderName = fhConfig.OriginalForHeaderName;
-    opts.OriginalHostHeaderName = fhConfig.OriginalHostHeaderName;
-    opts.OriginalProtoHeaderName = fhConfig.OriginalProtoHeaderName;
-    opts.RequireHeaderSymmetry = fhConfig.RequireHeaderSymmetry;
-});
+builder.Services.Configure<ForwardedHeadersOptions>(fhConfig.ConfigureForwardedHeaders);
 
 var app = builder.Build();
-
-
 
 app.UseHttpLogging();
 
@@ -100,7 +63,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-if (oidcConfig != null)
+if (authConfig != null)
 {
     app.UseAuthentication();
     app.UseAuthorization();

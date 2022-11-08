@@ -81,9 +81,7 @@ var app = builder.Build();
 app.UseHttpLogging();
 
 app.UseForwardedHeaders();
-
 app.UseRouting();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseCookiePolicy(new CookiePolicyOptions
@@ -102,7 +100,7 @@ if (oidcConfig != null)
 
 app.UseStaticFiles();
 app.UseApiProxy();
-
+app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();

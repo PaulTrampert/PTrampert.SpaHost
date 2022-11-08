@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 builder.Services.AddApiProxy(builder.Configuration.GetSection("ApiProxy"));
 var oidcConfig = config.GetSection("Auth")?.Get<OidcConfig>();
+var fhConfig = config.GetSection("ForwardedHeaders").Get<ForwardedHeadersConfig>();
 
 if (oidcConfig != null)
 {
@@ -52,22 +53,29 @@ if (oidcConfig != null)
 
 builder.Services.Configure<ForwardedHeadersOptions>(opts =>
 {
-    var fhConfig = config.GetSection("ForwardedHeaders").Get<ForwardedHeadersConfig>();
     opts.ForwardedHeaders = ForwardedHeaders.All;
     opts.AllowedHosts = fhConfig.AllowedHosts.ToList();
     opts.ForwardedForHeaderName = fhConfig.ForwardedForHeaderName;
     opts.ForwardedHostHeaderName = fhConfig.ForwardedHostHeaderName;
     opts.ForwardedProtoHeaderName = fhConfig.ForwardedProtoHeaderName;
-    opts.KnownNetworks.Clear();
-    foreach (var net in fhConfig.KnownNetworksParsed)
+    if (fhConfig.KnownNetworksParsed.Any())
     {
-        opts.KnownNetworks.Add(net);
+        opts.KnownNetworks.Clear();
+        foreach (var net in fhConfig.KnownNetworksParsed)
+        {
+            opts.KnownNetworks.Add(net);
+        }
     }
-    opts.KnownProxies.Clear();
-    foreach (var proxy in fhConfig.KnownProxiesParsed)
+
+    if (fhConfig.KnownProxiesParsed.Any())
     {
-        opts.KnownProxies.Add(proxy);
+        opts.KnownProxies.Clear();
+        foreach (var proxy in fhConfig.KnownProxiesParsed)
+        {
+            opts.KnownProxies.Add(proxy);
+        }
     }
+
     opts.OriginalForHeaderName = fhConfig.OriginalForHeaderName;
     opts.OriginalHostHeaderName = fhConfig.OriginalHostHeaderName;
     opts.OriginalProtoHeaderName = fhConfig.OriginalProtoHeaderName;

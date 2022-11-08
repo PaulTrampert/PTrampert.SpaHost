@@ -15,39 +15,25 @@ namespace PTrampert.SpaHost.Configuration
 
         public int? ForwardLimit { get; set; } = 1;
 
-        private IEnumerable<IPNetwork> knownNetworks = new[] {new IPNetwork(IPAddress.Loopback, 8)};
+        public IEnumerable<string>? KnownNetworks { get; set; }
 
-        public IEnumerable<string> KnownNetworks
+        public IEnumerable<IPNetwork> KnownNetworksParsed => KnownNetworks?.Select(v =>
         {
-            get => knownNetworks.Select(n => n.ToString())!;
-            set
+            var prefixAndLength = v.Split('/');
+            if (prefixAndLength.Length != 2)
             {
-                knownNetworks = value.Select(v =>
-                {
-                    var prefixAndLength = v.Split('/');
-                    if (prefixAndLength.Length != 2)
-                    {
-                        throw new FormatException($"{v} is not a valid CIDR network string.");
-                    }
-
-                    var prefix = IPAddress.Parse(prefixAndLength[0]);
-                    var prefixLength = int.Parse(prefixAndLength[1]);
-                    return new IPNetwork(prefix, prefixLength);
-                });
+                throw new FormatException($"{v} is not a valid CIDR network string.");
             }
-        }
 
-        public IEnumerable<IPNetwork> KnownNetworksParsed => knownNetworks;
+            var prefix = IPAddress.Parse(prefixAndLength[0]);
+            var prefixLength = int.Parse(prefixAndLength[1]);
+            return new IPNetwork(prefix, prefixLength);
+        }) ?? new List<IPNetwork>();
 
-        private IEnumerable<IPAddress> knownProxies = new[] {IPAddress.IPv6Loopback};
 
-        public IEnumerable<string> KnownProxies
-        {
-            get => knownProxies.Select(p => p.ToString());
-            set => knownProxies = value.Select(IPAddress.Parse);
-        }
+        public IEnumerable<string>? KnownProxies { get; set; }
 
-        public IEnumerable<IPAddress> KnownProxiesParsed => knownProxies;
+        public IEnumerable<IPAddress> KnownProxiesParsed => KnownProxies?.Select(IPAddress.Parse) ?? new List<IPAddress>();
 
         public string OriginalForHeaderName { get; set; } = "X-Original-For";
 

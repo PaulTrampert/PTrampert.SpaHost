@@ -1,19 +1,26 @@
 
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System.Text.Json;
 using PTrampert.SpaHost.Configuration;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
-builder.Services.AddApiProxy(builder.Configuration.GetSection("ApiProxy"));
 var authConfig = config.GetSection("AuthConfig")?.Get<AuthConfig>();
 var fhConfig = config.GetSection("ForwardedHeaders").Get<ForwardedHeadersConfig>();
 var redisConfig = config.GetSection("RedisConfig").Get<RedisConfig>();
+
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+builder.Services.AddOptions<JsonSerializerOptions>()
+    .Configure(opts => opts.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
+builder.Services.AddApiProxy(builder.Configuration.GetSection("ApiProxy"));
 
 if (authConfig != null)
 {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace PTrampert.SpaHost.Configuration
@@ -27,6 +28,11 @@ namespace PTrampert.SpaHost.Configuration
             }
 
             opts.SaveTokens = true;
+
+            opts.GetClaimsFromUserInfoEndpoint = true;
+
+            opts.TokenValidationParameters.NameClaimType = "name";
+            opts.TokenValidationParameters.RoleClaimType = "role";
         }
     }
 }

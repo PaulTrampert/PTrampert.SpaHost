@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Mcrio.Configuration.Provider.Docker.Secrets;
 using PTrampert.SpaHost.Configuration;
 using StackExchange.Redis;
 
@@ -17,14 +18,6 @@ builder.Host.ConfigureAppConfiguration((builderCtx, configurationBuilder) =>
     configurationBuilder.Sources.Clear();
     configurationBuilder.AddJsonFile("appsettings.json");
     configurationBuilder.AddJsonFile($"appsettings.{builderCtx.HostingEnvironment.EnvironmentName}.json");
-    if (Directory.Exists("/run/secrets"))
-    {
-        var settingsRegex = new Regex(@"^appsettings\.[^\.]+\.json$");
-        foreach (var file in Directory.EnumerateFiles("/run/secrets").Where(name => settingsRegex.IsMatch(Path.GetFileName(name))))
-        {
-            configurationBuilder.AddJsonFile(file);
-        }
-    }
 
     var additionalConfigs = Environment.GetEnvironmentVariable("SPAHOST_ADDITIONAL_APPSETTINGS");
     if (additionalConfigs != null)
@@ -35,6 +28,7 @@ builder.Host.ConfigureAppConfiguration((builderCtx, configurationBuilder) =>
         }
     }
 
+    configurationBuilder.AddDockerSecrets();
     configurationBuilder.AddEnvironmentVariables();
     configurationBuilder.AddCommandLine(args);
 });

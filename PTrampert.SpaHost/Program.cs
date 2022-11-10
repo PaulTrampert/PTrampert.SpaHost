@@ -7,11 +7,39 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using PTrampert.SpaHost.Configuration;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.ConfigureAppConfiguration((builderCtx, configurationBuilder) =>
+{
+    configurationBuilder.Sources.Clear();
+    configurationBuilder.AddJsonFile("appsettings.json");
+    configurationBuilder.AddJsonFile($"appsettings.{builderCtx.HostingEnvironment.EnvironmentName}.json");
+    if (Directory.Exists("/run/secrets"))
+    {
+        var settingsRegex = new Regex(@"^appsettings\.[^\.]+\.json$");
+        foreach (var file in Directory.EnumerateFiles("/run/secrets").Where(name => settingsRegex.IsMatch(Path.GetFileName(name))))
+        {
+            configurationBuilder.AddJsonFile(file);
+        }
+    }
+
+    var additionalConfigs = Environment.GetEnvironmentVariable("SPAHOST_ADDITIONAL_APPSETTINGS");
+    if (additionalConfigs != null)
+    {
+        foreach (var file in additionalConfigs.Split(",", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+        {
+            configurationBuilder.AddJsonFile(file);
+        }
+    }
+
+    configurationBuilder.AddEnvironmentVariables();
+    configurationBuilder.AddCommandLine(args);
+});
 var config = builder.Configuration;
+
 var authConfig = config.GetSection("AuthConfig")?.Get<AuthConfig>();
 var fhConfig = config.GetSection("ForwardedHeaders").Get<ForwardedHeadersConfig>();
 var redisConfig = config.GetSection("RedisConfig").Get<RedisConfig>();

@@ -4,10 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using Mcrio.Configuration.Provider.Docker.Secrets;
 using PTrampert.SpaHost.Configuration;
 using StackExchange.Redis;
@@ -15,10 +12,6 @@ using StackExchange.Redis;
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureAppConfiguration((builderCtx, configurationBuilder) =>
 {
-    configurationBuilder.Sources.Clear();
-    configurationBuilder.AddJsonFile("appsettings.json");
-    configurationBuilder.AddJsonFile($"appsettings.{builderCtx.HostingEnvironment.EnvironmentName}.json");
-
     var additionalConfigs = Environment.GetEnvironmentVariable("SPAHOST_ADDITIONAL_APPSETTINGS");
     if (additionalConfigs != null)
     {

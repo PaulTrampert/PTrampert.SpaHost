@@ -53,8 +53,14 @@ pipeline {
         stage('Push Image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'password', usernameVariable: 'username')]) {
+                    sh "docker login -u $username -p $password"
                     sh "docker push $DOCKER_REPO/$IMAGE_NAME:${releaseInfo.nextVersion().toString()}"
                     sh "docker push $DOCKER_REPO/$IMAGE_NAME:$BRANCH_TAG"
+                }
+            }
+            post {
+                always {
+                    sh "docker logout"
                 }
             }
         }

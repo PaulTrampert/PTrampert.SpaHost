@@ -60,6 +60,7 @@ pipeline {
         }
 
         stage('Github Release') {
+            when { expression { env.BRANCH_NAME == 'main' } }
             steps {
                 script {
                     publishGithubRelease(

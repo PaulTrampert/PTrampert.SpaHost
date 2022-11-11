@@ -57,10 +57,93 @@ These configuration values are used to allow your app to play nice with a revers
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| ForwardedHeadersConfig__AllowedHosts_[0-n] | string[] | '*' | Array of allowed hosts to be passed in x-forwarded-host |
+| ForwardedHeadersConfig__AllowedHosts__[0-n] | string[] | '*' | Array of allowed hosts to be passed in x-forwarded-host |
 | ForwardedHeadersConfig__ForwardedForHeaderName | string | 'X-Forwarded-For' | The name of the forwarded for header |
 | ForwardedHeadersConfig__ForwardedHostHeaderName | string | 'X-Forwarded-Host' | The name of the forwarded host header |
 | ForwardedHeadersConfig__ForwardedProtoHeaderName | string | 'X-Forwarded-Proto' | The name of the forwarded proto header |
 | ForwardedHeadersConfig__ForwardLimit | int | 1 | The max number of reverse proxies to respect |
-| ForwardedHeadersConfig__KnownNetworks | array of [CIDR](https://www.digitalocean.com/community/tutorials/understanding-ip-addresses-subnets-and-cidr-notation-for-networking) network strings | "127.0.0.0/8", "172.18.0.0/16", "172.17.0.0/16", "10.0.0.0/16" | The networks trusted reverse proxies may be coming from |
+| ForwardedHeadersConfig__KnownNetworks__[0-n] | array of [CIDR](https://www.digitalocean.com/community/tutorials/understanding-ip-addresses-subnets-and-cidr-notation-for-networking) network strings | "127.0.0.0/8", "172.18.0.0/16", "172.17.0.0/16", "10.0.0.0/16" | The networks trusted reverse proxies may be coming from |
+| ForwardedHeadersConfig__KnownProxies__[0-n] | array of IP Addresses | [] | The exact addresses of known proxies |
+| ForwardedHeadersConfig__OriginalForHeaderName | string | 'X-Original-For' | The name of the original for header |
+| ForwardedHeadersConfig__OriginalHostHeaderName | string | 'X-Original-Host' | The name of the original host header |
+| ForwardedHeadersConfig__OriginalProtoHeaderName | string | 'X-Original-Proto' | The name of the original proto header |
+| ForwardedHeadersConfig__RequireHeaderSymmetry | boolean | false | Require the number of header values to be in sync between the different headers being processed. |
 
+### RedisConfig
+Redis is used to store DataProtection keys in clustered scenarios. For production, the redis used should be configured to persist storage.
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| RedisConfig__UseForDataProtection | boolean | false | When running replicas, set to true to use Redis to share the encryption keys used for encrypting session cookies |
+| RedisConfig__DataProtectionConnectionString | string | redis:6379 | The Redis connection string to be used for key storage. |
+
+### ApiProxy
+This configuration section configures proxies to the back-end api's your SPA requires. See https://github.com/PaulTrampert/PTrampert.ApiProxy#readme for details on how to configure your api proxies. All api routes will be exposed to your SPA under the `/api/` base path.
+
+## Utility Routes
+### `POST /logout`
+This route will log you out of the application and redirect you to your identity provider for logout. For best results, make sure you use a form POST to this route.
+
+### `GET /userinfo`
+When authenticated, this route will return an array of claims assigned to the current user. The exact list of claims will depend on your identity provider and configured scopes.
+
+Example Response:
+```json
+[
+    {
+        "type": "auth_time",
+        "value": "1668133569",
+        "valueType": "http://www.w3.org/2001/XMLSchema#integer"
+    },
+    {
+        "type": "jti",
+        "value": "8211cc80-6550-4752-96af-a32e8f06cc96",
+        "valueType": "http://www.w3.org/2001/XMLSchema#string"
+    },
+    {
+        "type": "sub",
+        "value": "e10ab9f6-d04b-45f9-8a31-7d63312968f2",
+        "valueType": "http://www.w3.org/2001/XMLSchema#string"
+    },
+    {
+        "type": "typ",
+        "value": "ID",
+        "valueType": "http://www.w3.org/2001/XMLSchema#string"
+    },
+    {
+        "type": "session_state",
+        "value": "b8df9292-f1ac-40fb-99f2-80c5600492b2",
+        "valueType": "http://www.w3.org/2001/XMLSchema#string"
+    },
+    {
+        "type": "s_hash",
+        "value": "VOplksQDiuudOUgBBQYjUA",
+        "valueType": "http://www.w3.org/2001/XMLSchema#string"
+    },
+    {
+        "type": "sid",
+        "value": "b8df9292-f1ac-40fb-99f2-80c5600492b2",
+        "valueType": "http://www.w3.org/2001/XMLSchema#string"
+    },
+    {
+        "type": "name",
+        "value": "Test Testerson",
+        "valueType": "http://www.w3.org/2001/XMLSchema#string"
+    },
+    {
+        "type": "preferred_username",
+        "value": "test",
+        "valueType": "http://www.w3.org/2001/XMLSchema#string"
+    },
+    {
+        "type": "given_name",
+        "value": "Test",
+        "valueType": "http://www.w3.org/2001/XMLSchema#string"
+    },
+    {
+        "type": "family_name",
+        "value": "Testerson",
+        "valueType": "http://www.w3.org/2001/XMLSchema#string"
+    }
+]
+```

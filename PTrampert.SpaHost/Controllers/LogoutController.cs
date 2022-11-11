@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PTrampert.SpaHost.Controllers
 {
-    [Route("logout")]
+    [Route("[controller]")]
     public class LogoutController : Controller
     {
         [HttpPost]

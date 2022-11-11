@@ -35,6 +35,7 @@ Json config keys can be converted to environment variable names in the following
 | Json | Environment Variable | Command-Line Parameter |
 |------|----------------------|------------------------|
 | `{ "foo": { "bar": "value" } }` | `foo__bar=value` | `--foo:bar value` |
+
 For more information, see https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0
 
 Files found in `/run/secrets/*` will be treated the same as environment variables. For example, if you have a file, `/run/secrets/foo__bar` containing the content `value`, it would be equivalent to the json config `{ "foo": { "bar": "value" } }`.

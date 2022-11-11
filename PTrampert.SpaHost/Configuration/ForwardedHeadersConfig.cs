@@ -50,6 +50,7 @@ namespace PTrampert.SpaHost.Configuration
             opts.ForwardedForHeaderName = ForwardedForHeaderName;
             opts.ForwardedHostHeaderName = ForwardedHostHeaderName;
             opts.ForwardedProtoHeaderName = ForwardedProtoHeaderName;
+            opts.ForwardLimit = ForwardLimit;
             if (KnownNetworksParsed.Any())
             {
                 opts.KnownNetworks.Clear();

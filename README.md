@@ -81,6 +81,9 @@ Redis is used to store DataProtection keys in clustered scenarios. For productio
 ### ApiProxy
 This configuration section configures proxies to the back-end api's your SPA requires. See https://github.com/PaulTrampert/PTrampert.ApiProxy#readme for details on how to configure your api proxies. All api routes will be exposed to your SPA under the `/api/` base path.
 
+### Serilog
+This project uses Serilog by default. See [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration#serilogsettingsconfiguration--) for detailed configuration instructions.
+
 ## Utility Routes
 ### `POST /login`
 Posting to this route will issues an authentication challenge (aka redirect you to the identity provider). For best results, make sure you use a form POST to this route.

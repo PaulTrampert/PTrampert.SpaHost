@@ -13,6 +13,7 @@ pipeline {
         DOCKER_REPO_CREDENTIALS = 'docker_hub'
         IMAGE_NAME = "spahost"
         BRANCH_TAG = getBranchTag(env)
+        PROJECT_NAME = "PTrampert.SpaHost"
     }
 
     options {

@@ -45,7 +45,7 @@ pipeline {
             steps {
                 script {
                     def image = docker.build("$DOCKER_REPO/$IMAGE_NAME:${releaseInfo.nextVersion().toString()}", "--no-cache -f PTrampert.SpaHost/Dockerfile .")
-                    image.tag("$DOCKER_REPO/$IMAGE_NAME:$BRANCH_TAG")
+                    image.tag("$BRANCH_TAG")
                 }
             }
         }

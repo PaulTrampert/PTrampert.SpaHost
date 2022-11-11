@@ -62,12 +62,5 @@ These configuration values are used to allow your app to play nice with a revers
 | ForwardedHeadersConfig__ForwardedHostHeaderName | string | 'X-Forwarded-Host' | The name of the forwarded host header |
 | ForwardedHeadersConfig__ForwardedProtoHeaderName | string | 'X-Forwarded-Proto' | The name of the forwarded proto header |
 | ForwardedHeadersConfig__ForwardLimit | int | 1 | The max number of reverse proxies to respect |
-| ForwardedHeadersConfig__KnownNetworks | array of [CIDR](https://www.digitalocean.com/community/tutorials/understanding-ip-addresses-subnets-and-cidr-notation-for-networking) network strings | ```
-[
-    "127.0.0.0/8",
-    "172.18.0.0/16",
-    "172.17.0.0/16",
-    "10.0.0.0/16"
-]
-``` | The max number of reverse proxies to respect |
+| ForwardedHeadersConfig__KnownNetworks | array of [CIDR](https://www.digitalocean.com/community/tutorials/understanding-ip-addresses-subnets-and-cidr-notation-for-networking) network strings | "127.0.0.0/8", "172.18.0.0/16", "172.17.0.0/16", "10.0.0.0/16" | The networks trusted reverse proxies may be coming from |
 

@@ -103,6 +103,8 @@ try
         app.UseAuthorization();
     }
 
+    app.UseWebSockets();
+
     app.UseStaticFiles();
     app.UseApiProxy();
     app.MapControllers();

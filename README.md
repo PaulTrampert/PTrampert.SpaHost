@@ -72,7 +72,7 @@ These configuration values are used to allow your app to play nice with a revers
 
 ### Antiforgery
 Antiforgery protection is enabled by default. This means that for requests to authenticated routes, your client application will either need to supply an antiforgery token via a header or a form field. The antiforgery token can be obtained via
-`GET /antiforgery`.
+[`GET /antiforgery`](#get-antiforgery).
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|

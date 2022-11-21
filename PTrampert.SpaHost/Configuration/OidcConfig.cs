@@ -6,10 +6,10 @@ namespace PTrampert.SpaHost.Configuration
 {
     public class OidcConfig
     {
-        public string Authority { get; set; }
-        public string ClientId { get; set; }
-        public string ClientSecret { get; set; }
-        public IEnumerable<string> Scopes { get; set; }
+        public string? Authority { get; set; }
+        public string? ClientId { get; set; }
+        public string? ClientSecret { get; set; }
+        public IEnumerable<string>? Scopes { get; set; }
 
         public void ConfigureOidc(OpenIdConnectOptions opts)
         {
@@ -22,7 +22,7 @@ namespace PTrampert.SpaHost.Configuration
             opts.ResponseMode = OpenIdConnectResponseMode.FormPost;
 
             opts.Scope.Clear();
-            foreach (var scope in Scopes)
+            foreach (var scope in Scopes ?? new List<string>())
             {
                 opts.Scope.Add(scope);
             }

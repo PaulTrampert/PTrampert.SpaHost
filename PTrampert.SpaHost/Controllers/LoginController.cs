@@ -6,6 +6,7 @@ namespace PTrampert.SpaHost.Controllers;
 public class LoginController : Controller
 {
     [HttpPost]
+    [IgnoreAntiforgeryToken]
     public IActionResult Index()
     {
         if (User.Identity?.IsAuthenticated ?? false)

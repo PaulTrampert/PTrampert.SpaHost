@@ -1,4 +1,4 @@
-@Library('github-release-helpers@v0.2.1')
+@Library('github-release-helpers@v0.2.2')
 def releaseInfo
 
 def getBranchTag(env) {
@@ -35,7 +35,7 @@ pipeline {
                         'v',
                         'Github User/Pass',
                         'https://api.github.com',
-                        BRANCH_TAG == "main" ? null : BRANCH_TAG,
+                        BRANCH_NAME == "main" ? null : BRANCH_NAME,
                         env.BUILD_NUMBER
                     )
 

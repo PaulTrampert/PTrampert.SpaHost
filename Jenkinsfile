@@ -2,7 +2,11 @@
 def releaseInfo
 
 def getBranchTag(env) {
-  return (env.BRANCH_NAME == "main") ? "latest" : env.BRANCH_NAME
+  def result = env.BRANCH_NAME
+  if (result.indexOf('/') > -1) {
+    result = result.substring(result.lastIndexOf('/') + 1, result.length())
+  }
+  return (result == "main") ? "latest" : result
 }
 
 pipeline {

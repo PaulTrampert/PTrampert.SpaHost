@@ -35,7 +35,7 @@ pipeline {
                         'v',
                         'Github User/Pass',
                         'https://api.github.com',
-                        BRANCH_NAME == "main" ? null : BRANCH_NAME,
+                        BRANCH_TAG == "main" ? null : BRANCH_TAG,
                         env.BUILD_NUMBER
                     )
 

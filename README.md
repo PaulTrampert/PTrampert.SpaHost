@@ -70,6 +70,16 @@ These configuration values are used to allow your app to play nice with a revers
 | ForwardedHeadersConfig__OriginalProtoHeaderName | string | 'X-Original-Proto' | The name of the original proto header |
 | ForwardedHeadersConfig__RequireHeaderSymmetry | boolean | false | Require the number of header values to be in sync between the different headers being processed. |
 
+### Antiforgery
+Antiforgery protection is enabled by default. This means that for requests to authenticated routes, your client application will either need to supply an antiforgery token via a header or a form field. The antiforgery token can be obtained via
+[`GET /antiforgery`](#get-antiforgery).
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| Antiforgery__EnableProtection | boolean | true | Enable antiforgery protection |
+| Antiforgery__HeaderName | string | X-XSRF-Token | The header name to look for an antiforgery token in |
+| Antiforgery__FieldName | string | antiforgeryToken | The form field to look for an antiforgery token in |
+
 ### RedisConfig
 Redis is used to store DataProtection keys in clustered scenarios. For production, the redis used should be configured to persist storage.
 
@@ -90,6 +100,9 @@ Posting to this route will issues an authentication challenge (aka redirect you 
 
 ### `POST /logout`
 This route will log you out of the application and redirect you to your identity provider for logout. For best results, make sure you use a form POST to this route.
+
+### `GET /antiforgery`
+This route will set a cookie named `XSRF-TOKEN` with an antiforgery token. This token should be supplied in fetch requests via the configured `Antiforgery__HeaderName` or in form submissions via a hidden input with the name configured in `Antiforgery__FieldName`.
 
 ### `GET /userinfo`
 When authenticated, this route will return an array of claims assigned to the current user. The exact list of claims will depend on your identity provider and configured scopes.

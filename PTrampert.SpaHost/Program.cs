@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using PTrampert.SpaHost.Configuration;
 using Serilog;
 using StackExchange.Redis;
@@ -18,18 +19,16 @@ Log.Information("Starting up");
 try
 {
     var builder = WebApplication.CreateBuilder(args);
-    builder.Host.ConfigureAppConfiguration((builderCtx, configurationBuilder) =>
-    {
-        var additionalConfigs = Environment.GetEnvironmentVariable("SPAHOST_ADDITIONAL_APPSETTINGS");
-        if (additionalConfigs != null)
-            foreach (var file in additionalConfigs.Split(",",
-                         StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
-                configurationBuilder.AddJsonFile(file);
+    var additionalConfigs = Environment.GetEnvironmentVariable("SPAHOST_ADDITIONAL_APPSETTINGS");
+    if (additionalConfigs != null)
+        foreach (var file in additionalConfigs.Split(",",
+                     StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+            builder.Configuration.AddJsonFile(file);
 
-        configurationBuilder.AddDockerSecrets();
-        configurationBuilder.AddEnvironmentVariables();
-        configurationBuilder.AddCommandLine(args);
-    });
+    builder.Configuration.AddDockerSecrets();
+    builder.Configuration.AddEnvironmentVariables();
+    builder.Configuration.AddCommandLine(args);
+
     var config = builder.Configuration;
 
     builder.Host.UseSerilog((ctx, lc) =>
@@ -77,7 +76,7 @@ try
                 opts.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
             .AddCookie(authConfig.CookieConfig.ConfigureCookies)
-            .AddOpenIdConnect(authConfig.OidcConfig.ConfigureOidc);
+            .AddOpenIdConnect(authConfig.OidcConfig.ConfigureOidc(builder.Environment));
 
         if (authConfig.RequireForStaticFiles)
             builder.Services.AddAuthorization(opts =>

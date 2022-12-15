@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTrampert.SpaHost", "PTramp
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{9BAC4064-C9C6-4168-94DA-FE63C2168263}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTrampert.SpaHost.SampleApi", "PTrampert.SpaHost.SampleApi\PTrampert.SpaHost.SampleApi.csproj", "{1CD0C367-7E23-4FFB-8E8F-A1BC0AA36ACA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTrampert.SpaHost.SampleApi", "PTrampert.SpaHost.SampleApi\PTrampert.SpaHost.SampleApi.csproj", "{1CD0C367-7E23-4FFB-8E8F-A1BC0AA36ACA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A395FF7C-2C87-4018-92CD-EFC6042251C0}"
+	ProjectSection(SolutionItems) = preProject
+		keycloak\localdev.json = keycloak\localdev.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

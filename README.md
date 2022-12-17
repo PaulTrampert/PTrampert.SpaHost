@@ -13,7 +13,7 @@ A simple Dockerfile might look something like this:
 ```Dockerfile
 FROM node-lts as build
 WORKDIR /src
-COPY ['package.json', 'package-lock.json', './']
+COPY ["package.json", "package-lock.json", "./"]
 RUN npm install
 COPY . .
 RUN npm run build
@@ -43,50 +43,50 @@ Files found in `/run/secrets/*` will be treated the same as environment variable
 ### AuthConfig
 Values here are used to configure authentication. If no values are provided, the app will not have any authentication.
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| AuthConfig__RequireForStaticFiles | boolean | false | Require authentication for files in wwwroot. This is useful if your entire SPA requires authentication. |
-| AuthConfig__CookieConfig__ExpireTimeSpan | hh:mm:ss | 00:30:00 | How long a user's session lasts before needing to re-authenticate. |
-| AuthConfig__CookieConfig__SlidingExpiration | boolean | true | Should the session expiration be reset on user actions? |
-| AuthConfig__OidcConfig__Authority | url | null | The base path of the OpenId Connect server to use for authentication |
-| AuthConfig__OidcConfig__ClientId | string | null | The OpenId Connect client id for this client. |
-| AuthConfig__OidcConfig__ClientSecret | string | null | The OpenId Connect client secret for this client. |
-| AuthConfig__OidcConfig__Scopes__[0-n] | string[] | null | The scopes this client requires. Must always include `openid`. Should also include `offline_access` to make sure access tokens can be refreshed. |
+| Key                                         | Type     | Default  | Description                                                                                                                                      |
+|---------------------------------------------|----------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| AuthConfig__RequireForStaticFiles           | boolean  | false    | Require authentication for files in wwwroot. This is useful if your entire SPA requires authentication.                                          |
+| AuthConfig__CookieConfig__ExpireTimeSpan    | hh:mm:ss | 00:30:00 | How long a user's session lasts before needing to re-authenticate.                                                                               |
+| AuthConfig__CookieConfig__SlidingExpiration | boolean  | true     | Should the session expiration be reset on user actions?                                                                                          |
+| AuthConfig__OidcConfig__Authority           | url      | null     | The base path of the OpenId Connect server to use for authentication                                                                             |
+| AuthConfig__OidcConfig__ClientId            | string   | null     | The OpenId Connect client id for this client.                                                                                                    |
+| AuthConfig__OidcConfig__ClientSecret        | string   | null     | The OpenId Connect client secret for this client.                                                                                                |
+| AuthConfig__OidcConfig__Scopes__[0-n]       | string[] | null     | The scopes this client requires. Must always include `openid`. Should also include `offline_access` to make sure access tokens can be refreshed. |
 
 ### ForwardedHeadersConfig
 These configuration values are used to allow your app to play nice with a reverse proxy (e.g. Traefik as an ingress proxy for docker swarm). Sensible defaults for deployment in docker swarm are pre-configured. Most of these values are passed, unmodified, to [ForwardedHeadersOptions](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.forwardedheadersoptions?view=aspnetcore-6.0)
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| ForwardedHeadersConfig__AllowedHosts__[0-n] | string[] | '*' | Array of allowed hosts to be passed in x-forwarded-host |
-| ForwardedHeadersConfig__ForwardedForHeaderName | string | 'X-Forwarded-For' | The name of the forwarded for header |
-| ForwardedHeadersConfig__ForwardedHostHeaderName | string | 'X-Forwarded-Host' | The name of the forwarded host header |
-| ForwardedHeadersConfig__ForwardedProtoHeaderName | string | 'X-Forwarded-Proto' | The name of the forwarded proto header |
-| ForwardedHeadersConfig__ForwardLimit | int | 1 | The max number of reverse proxies to respect |
-| ForwardedHeadersConfig__KnownNetworks__[0-n] | array of [CIDR](https://www.digitalocean.com/community/tutorials/understanding-ip-addresses-subnets-and-cidr-notation-for-networking) network strings | "127.0.0.0/8", "172.18.0.0/16", "172.17.0.0/16", "10.0.0.0/16" | The networks trusted reverse proxies may be coming from |
-| ForwardedHeadersConfig__KnownProxies__[0-n] | array of IP Addresses | [] | The exact addresses of known proxies |
-| ForwardedHeadersConfig__OriginalForHeaderName | string | 'X-Original-For' | The name of the original for header |
-| ForwardedHeadersConfig__OriginalHostHeaderName | string | 'X-Original-Host' | The name of the original host header |
-| ForwardedHeadersConfig__OriginalProtoHeaderName | string | 'X-Original-Proto' | The name of the original proto header |
-| ForwardedHeadersConfig__RequireHeaderSymmetry | boolean | false | Require the number of header values to be in sync between the different headers being processed. |
+| Key                                              | Type                                                                                                                                                  | Default                                                        | Description                                                                                      |
+|--------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| ForwardedHeadersConfig__AllowedHosts__[0-n]      | string[]                                                                                                                                              | '*'                                                            | Array of allowed hosts to be passed in x-forwarded-host                                          |
+| ForwardedHeadersConfig__ForwardedForHeaderName   | string                                                                                                                                                | 'X-Forwarded-For'                                              | The name of the forwarded for header                                                             |
+| ForwardedHeadersConfig__ForwardedHostHeaderName  | string                                                                                                                                                | 'X-Forwarded-Host'                                             | The name of the forwarded host header                                                            |
+| ForwardedHeadersConfig__ForwardedProtoHeaderName | string                                                                                                                                                | 'X-Forwarded-Proto'                                            | The name of the forwarded proto header                                                           |
+| ForwardedHeadersConfig__ForwardLimit             | int                                                                                                                                                   | 1                                                              | The max number of reverse proxies to respect                                                     |
+| ForwardedHeadersConfig__KnownNetworks__[0-n]     | array of [CIDR](https://www.digitalocean.com/community/tutorials/understanding-ip-addresses-subnets-and-cidr-notation-for-networking) network strings | "127.0.0.0/8", "172.18.0.0/16", "172.17.0.0/16", "10.0.0.0/16" | The networks trusted reverse proxies may be coming from                                          |
+| ForwardedHeadersConfig__KnownProxies__[0-n]      | array of IP Addresses                                                                                                                                 | []                                                             | The exact addresses of known proxies                                                             |
+| ForwardedHeadersConfig__OriginalForHeaderName    | string                                                                                                                                                | 'X-Original-For'                                               | The name of the original for header                                                              |
+| ForwardedHeadersConfig__OriginalHostHeaderName   | string                                                                                                                                                | 'X-Original-Host'                                              | The name of the original host header                                                             |
+| ForwardedHeadersConfig__OriginalProtoHeaderName  | string                                                                                                                                                | 'X-Original-Proto'                                             | The name of the original proto header                                                            |
+| ForwardedHeadersConfig__RequireHeaderSymmetry    | boolean                                                                                                                                               | false                                                          | Require the number of header values to be in sync between the different headers being processed. |
 
 ### Antiforgery
 Antiforgery protection is enabled by default. This means that for requests to authenticated routes, your client application will either need to supply an antiforgery token via a header or a form field. The antiforgery token can be obtained via
 [`GET /antiforgery`](#get-antiforgery).
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| Antiforgery__EnableProtection | boolean | true | Enable antiforgery protection |
-| Antiforgery__HeaderName | string | X-XSRF-Token | The header name to look for an antiforgery token in |
-| Antiforgery__FieldName | string | antiforgeryToken | The form field to look for an antiforgery token in |
+| Key                           | Type    | Default          | Description                                         |
+|-------------------------------|---------|------------------|-----------------------------------------------------|
+| Antiforgery__EnableProtection | boolean | true             | Enable antiforgery protection                       |
+| Antiforgery__HeaderName       | string  | X-XSRF-Token     | The header name to look for an antiforgery token in |
+| Antiforgery__FieldName        | string  | antiforgeryToken | The form field to look for an antiforgery token in  |
 
 ### RedisConfig
 Redis is used to store DataProtection keys in clustered scenarios. For production, the redis used should be configured to persist storage.
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| RedisConfig__UseForDataProtection | boolean | false | When running replicas, set to true to use Redis to share the encryption keys used for encrypting session cookies |
-| RedisConfig__DataProtectionConnectionString | string | redis:6379 | The Redis connection string to be used for key storage. |
+| Key                                         | Type    | Default    | Description                                                                                                      |
+|---------------------------------------------|---------|------------|------------------------------------------------------------------------------------------------------------------|
+| RedisConfig__UseForDataProtection           | boolean | false      | When running replicas, set to true to use Redis to share the encryption keys used for encrypting session cookies |
+| RedisConfig__DataProtectionConnectionString | string  | redis:6379 | The Redis connection string to be used for key storage.                                                          |
 
 ### ApiProxy
 This configuration section configures proxies to the back-end api's your SPA requires. See https://github.com/PaulTrampert/PTrampert.ApiProxy#readme for details on how to configure your api proxies. All api routes will be exposed to your SPA under the `/api/` base path.
@@ -95,8 +95,9 @@ This configuration section configures proxies to the back-end api's your SPA req
 This project uses Serilog by default. See [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration#serilogsettingsconfiguration--) for detailed configuration instructions.
 
 ## Utility Routes
-### `POST /login`
-Posting to this route will issues an authentication challenge (aka redirect you to the identity provider). For best results, make sure you use a form POST to this route.
+### `POST|GET /login?redirectUri`
+This route will issue the authentication challenge. Can be either `GET` or `POST`, but either way, needs to be a page load to follow the resulting redirect to the identity provider.
+Accepts a query parameter of `redirectUri` which will allow the user to land on the originally requested uri after authentication. `redirectUri` must be a local uri.
 
 ### `POST /logout`
 This route will log you out of the application and redirect you to your identity provider for logout. For best results, make sure you use a form POST to this route.

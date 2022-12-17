@@ -17,5 +17,17 @@ services:
       context: .
       dockerfile: PTrampert.SpaHost.SampleApi/Dockerfile
 
+  auth:
+    image: quay.io/keycloak/keycloak
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: Asdfasdf1
+    ports:
+    - 8080:8080
+    volumes:
+    - ./keycloak/:/opt/keycloak/data/import/
+
+
   redis:
     image: redis

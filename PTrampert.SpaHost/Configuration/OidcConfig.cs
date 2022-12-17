@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace PTrampert.SpaHost.Configuration
@@ -11,28 +12,37 @@ namespace PTrampert.SpaHost.Configuration
         public string? ClientSecret { get; set; }
         public IEnumerable<string>? Scopes { get; set; }
 
-        public void ConfigureOidc(OpenIdConnectOptions opts)
+        public Action<OpenIdConnectOptions> ConfigureOidc(IWebHostEnvironment env)
         {
-            opts.Authority = Authority;
-
-            opts.ClientId = ClientId;
-            opts.ClientSecret = ClientSecret;
-
-            opts.ResponseType = OpenIdConnectResponseType.CodeIdToken;
-            opts.ResponseMode = OpenIdConnectResponseMode.FormPost;
-
-            opts.Scope.Clear();
-            foreach (var scope in Scopes ?? new List<string>())
+            return opts =>
             {
-                opts.Scope.Add(scope);
-            }
+                opts.Authority = Authority;
 
-            opts.SaveTokens = true;
+                opts.ClientId = ClientId;
+                opts.ClientSecret = ClientSecret;
 
-            opts.GetClaimsFromUserInfoEndpoint = true;
+                opts.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+                opts.ResponseMode = OpenIdConnectResponseMode.FormPost;
 
-            opts.TokenValidationParameters.NameClaimType = "name";
-            opts.TokenValidationParameters.RoleClaimType = "role";
+                opts.Scope.Clear();
+                foreach (var scope in Scopes ?? new List<string>())
+                {
+                    opts.Scope.Add(scope);
+                }
+
+                opts.SaveTokens = true;
+
+                opts.GetClaimsFromUserInfoEndpoint = true;
+
+                opts.TokenValidationParameters.NameClaimType = "name";
+                opts.TokenValidationParameters.RoleClaimType = "role";
+
+                if (env.IsDevelopment())
+                {
+                    opts.RequireHttpsMetadata = false;
+                    IdentityModelEventSource.ShowPII = true;
+                }
+            };
         }
     }
 }

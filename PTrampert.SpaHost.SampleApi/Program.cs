@@ -22,7 +22,7 @@ try
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
         {
-            opts.Authority = "https://auth.ptrampert.com/realms/dev";
+            opts.Authority = "http://auth:8080/realms/localdev";
             opts.RequireHttpsMetadata = false;
             opts.TokenValidationParameters.ValidateAudience = false;
             opts.TokenValidationParameters.AudienceValidator = null;

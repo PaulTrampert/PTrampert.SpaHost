@@ -34,9 +34,9 @@ try
     builder.Host.UseSerilog((ctx, lc) =>
         lc.ReadFrom.Configuration(ctx.Configuration));
 
-    var authConfig = config.GetSection("AuthConfig")?.Get<AuthConfig>();
-    var fhConfig = config.GetSection("ForwardedHeaders").Get<ForwardedHeadersConfig>();
-    var redisConfig = config.GetSection("RedisConfig").Get<RedisConfig>();
+    var authConfig = config.GetSection("AuthConfig")?.Get<AuthConfig>() ?? new AuthConfig();
+    var fhConfig = config.GetSection("ForwardedHeaders").Get<ForwardedHeadersConfig>() ?? new ForwardedHeadersConfig();
+    var redisConfig = config.GetSection("RedisConfig").Get<RedisConfig>() ?? new RedisConfig();
 
     JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -49,7 +49,7 @@ try
         builder.Services.AddAntiforgery(opts =>
         {
             opts.HeaderName = config.GetValue<string>("Antiforgery:HeaderName", "X-XSRF-TOKEN");
-            opts.FormFieldName = config.GetValue<string>("Antiforgery:FieldName", "antiforgeryToken");
+            opts.FormFieldName = config.GetValue<string>("Antiforgery:FieldName", "antiforgeryToken")!;
         });
         builder.Services.AddControllersWithViews(opts =>
         {

@@ -21,8 +21,6 @@ namespace PTrampert.SpaHost.Controllers
         public string Value { get; set; }
         public string ValueType { get; set; }
 
-        public SimplifiedClaim(){}
-
         public SimplifiedClaim(Claim c)
         {
             Type = c.Type;

@@ -17,7 +17,7 @@ namespace PTrampert.SpaHost.Controllers
             this.antiforgeryService = antiforgeryService;
         }
 
-        public async Task Get()
+        public void Get()
         {
             var tokens = antiforgeryService.GetAndStoreTokens(HttpContext);
             Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken!, new CookieOptions

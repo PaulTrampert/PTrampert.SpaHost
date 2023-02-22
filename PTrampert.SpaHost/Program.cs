@@ -69,6 +69,8 @@ try
                 .PersistKeysToStackExchangeRedis(redis, $"{builder.Environment.ApplicationName}_dpapi");
         }
 
+        builder.Services.AddOpenIdConnectAccessTokenManagement();
+
         builder.Services.AddAuthentication(opts =>
             {
                 opts.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace PTrampert.SpaHost.Configuration;
 
@@ -12,5 +13,9 @@ public class CookieConfig
     {
         opts.ExpireTimeSpan = ExpireTimeSpan ?? TimeSpan.FromMinutes(30);
         opts.SlidingExpiration = SlidingExpiration;
+        opts.Events.OnSigningOut = async e =>
+        {
+            await e.HttpContext.RevokeRefreshTokenAsync();
+        };
     }
 }

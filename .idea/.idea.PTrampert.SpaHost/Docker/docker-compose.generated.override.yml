@@ -1,0 +1,43 @@
+# This is a generated file. Not intended for manual editing.
+version: "3.4"
+services:
+  ptrampert.spahost:
+    build:
+      context: "C:\\Code\\PTrampert.SpaHost"
+      dockerfile: "PTrampert.SpaHost/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net7.0/PTrampert.SpaHost.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+      NUGET_PACKAGES: "C:\\Users\\pault\\.nuget\\packages"
+      NUGET_FALLBACK_PACKAGES: "C:\\Users\\pault\\.nuget\\packages"
+    image: "ptrampertspahost:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\pault\\.nuget\\packages:/root/.nuget/fallbackpackages"
+    - "C:\\Code\\PTrampert.SpaHost\\PTrampert.SpaHost:/app:rw"
+    - "C:\\Code\\PTrampert.SpaHost:/src:rw"
+    working_dir: "/app"
+  ptrampert.spahost.sampleapi:
+    build:
+      context: "C:\\Code\\PTrampert.SpaHost"
+      dockerfile: "PTrampert.SpaHost.SampleApi/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net7.0/PTrampert.SpaHost.SampleApi.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+      NUGET_PACKAGES: "C:\\Users\\pault\\.nuget\\packages"
+      NUGET_FALLBACK_PACKAGES: "C:\\Users\\pault\\.nuget\\packages"
+    image: "ptrampertspahostsampleapi:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\pault\\.nuget\\packages:/root/.nuget/fallbackpackages"
+    - "C:\\Code\\PTrampert.SpaHost\\PTrampert.SpaHost.SampleApi:/app:rw"
+    - "C:\\Code\\PTrampert.SpaHost:/src:rw"
+    working_dir: "/app"

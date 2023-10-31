@@ -9,5 +9,7 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
-    group:
-      - "main"
+    groups:
+      csharp-deps:
+        patterns:
+          - "*" # Matches all C# dependencies

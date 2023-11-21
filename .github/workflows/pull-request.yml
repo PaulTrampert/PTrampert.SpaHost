@@ -1,0 +1,15 @@
+name: Build and Test PR
+on:
+  pull_request:
+    branches: ["dev"]
+jobs:
+  version:
+    uses: ./.github/workflows/version.yml
+    with:
+      main_branch: 'refs/heads/main'
+  build-image:
+    uses: ./.github/workflows/build-image.yml
+    needs: version
+    with:
+      Version: ${{needs.version.outputs.version}}
+      ReleaseStream: ${{needs.version.outputs.release_stream}}

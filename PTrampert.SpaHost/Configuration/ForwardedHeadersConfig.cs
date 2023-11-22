@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.HttpOverrides;
+using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 
 namespace PTrampert.SpaHost.Configuration
 {

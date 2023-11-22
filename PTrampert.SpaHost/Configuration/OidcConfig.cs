@@ -42,6 +42,17 @@ namespace PTrampert.SpaHost.Configuration
                     opts.RequireHttpsMetadata = false;
                     IdentityModelEventSource.ShowPII = true;
                 }
+
+                opts.Events.OnRedirectToIdentityProvider = async e =>
+                {
+                    if (e.Request.Path.StartsWithSegments("/api", StringComparison.InvariantCultureIgnoreCase)
+                        || e.Request.Path.StartsWithSegments("/userinfo", StringComparison.InvariantCultureIgnoreCase)
+                        || e.Request.Path.StartsWithSegments("/antiforgery", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        e.Response.StatusCode = 401;
+                        e.HandleResponse();
+                    }
+                };
             };
         }
     }

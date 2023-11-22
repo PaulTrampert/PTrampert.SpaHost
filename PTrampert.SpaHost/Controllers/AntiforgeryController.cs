@@ -8,15 +8,8 @@ namespace PTrampert.SpaHost.Controllers
     [Route("[controller]")]
     [ApiController]
     [Authorize]
-    public class AntiforgeryController : ControllerBase
+    public class AntiforgeryController(IAntiforgery antiforgeryService) : ControllerBase
     {
-        private readonly IAntiforgery antiforgeryService;
-
-        public AntiforgeryController(IAntiforgery antiforgeryService)
-        {
-            this.antiforgeryService = antiforgeryService;
-        }
-
         public void Get()
         {
             var tokens = antiforgeryService.GetAndStoreTokens(HttpContext);

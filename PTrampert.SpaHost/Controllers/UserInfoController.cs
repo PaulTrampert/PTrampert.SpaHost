@@ -15,17 +15,10 @@ namespace PTrampert.SpaHost.Controllers
         }
     }
 
-    public class SimplifiedClaim
+    public class SimplifiedClaim(Claim c)
     {
-        public string Type { get; set; }
-        public string Value { get; set; }
-        public string ValueType { get; set; }
-
-        public SimplifiedClaim(Claim c)
-        {
-            Type = c.Type;
-            Value = c.Value;
-            ValueType = c.ValueType;
-        }
+        public string Type { get; set; } = c.Type;
+        public string Value { get; set; } = c.Value;
+        public string ValueType { get; set; } = c.ValueType;
     }
 }

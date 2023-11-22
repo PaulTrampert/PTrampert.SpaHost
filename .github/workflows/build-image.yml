@@ -1,0 +1,49 @@
+
+name: Build Docker Image
+on:
+  workflow_call:
+    inputs:
+      Dockerfile:
+        description: 'Path to Dockerfile'
+        required: false
+        type: string
+        default: 'PTrampert.SpaHost/Dockerfile'
+      ImageName:
+        description: 'Name of the image to build'
+        required: false
+        type: string
+        default: 'paultrampert/spahost'
+      Version:
+        description: 'Version of the image to build'
+        required: true
+        type: string
+      ReleaseStream:
+        description: 'Release stream to use'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t ${{inputs.ImageName}}:${{inputs.Version}} -f ${{inputs.Dockerfile}} .
+
+      - name: Retag image with release stream
+        run: docker tag ${{inputs.ImageName}}:${{inputs.Version}} ${{inputs.ImageName}}:${{inputs.ReleaseStream}}
+
+      - name: Login to Docker Hub
+        run: echo ${{secrets.DOCKER_HUB_TOKEN}} | docker login -u ${{secrets.DOCKER_HUB_USERNAME}} --password-stdin
+
+      - name: Push Docker image with release stream tag
+        run: docker push ${{inputs.ImageName}}:${{inputs.ReleaseStream}}
+    
+      - name: Push Docker image with version tag
+        run: docker push ${{inputs.ImageName}}:${{inputs.Version}}
+
+      - name: Logout of Docker Hub
+        run: docker logout

@@ -18,6 +18,7 @@ Log.Information("Starting up");
 
 try
 {
+    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
     var builder = WebApplication.CreateBuilder(args);
     var additionalConfigs = Environment.GetEnvironmentVariable("SPAHOST_ADDITIONAL_APPSETTINGS");
     if (additionalConfigs != null)

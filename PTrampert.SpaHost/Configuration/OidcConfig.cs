@@ -17,7 +17,6 @@ namespace PTrampert.SpaHost.Configuration
             return opts =>
             {
                 opts.Authority = Authority;
-
                 opts.ClientId = ClientId;
                 opts.ClientSecret = ClientSecret;
 
@@ -33,7 +32,7 @@ namespace PTrampert.SpaHost.Configuration
                 opts.SaveTokens = true;
 
                 opts.GetClaimsFromUserInfoEndpoint = true;
-
+                opts.MapInboundClaims = false;
                 opts.TokenValidationParameters.NameClaimType = "name";
                 opts.TokenValidationParameters.RoleClaimType = "role";
 

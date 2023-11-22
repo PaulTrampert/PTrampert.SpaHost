@@ -2,6 +2,9 @@
 name: Build Docker Image
 on:
   workflow_call:
+    secrets:
+      DOCKER_HUB_TOKEN:
+        required: true
     inputs:
       Dockerfile:
         description: 'Path to Dockerfile'
@@ -19,10 +22,6 @@ on:
         type: string
       ReleaseStream:
         description: 'Release stream to use'
-        required: true
-        type: string
-      DockerHubToken:
-        description: 'Token to use to login to Docker Hub'
         required: true
         type: string
 
@@ -43,7 +42,7 @@ jobs:
         uses: docker/login-action@v1
         with:
           username: ${{vars.DOCKER_HUB_USERNAME}}
-          password: ${{inputs.DockerHubToken}}
+          password: ${{secrets.DOCKER_HUB_TOKEN}}
 
       - name: Push Docker image with release stream tag
         run: docker push ${{inputs.ImageName}}:${{inputs.ReleaseStream}}

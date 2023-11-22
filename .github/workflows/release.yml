@@ -14,3 +14,4 @@ jobs:
     with:
       Version: ${{needs.version.outputs.version}}
       ReleaseStream: ${{needs.version.outputs.release_stream}}
+      DockerHubToken: ${{secrets.DOCKER_HUB_TOKEN}}

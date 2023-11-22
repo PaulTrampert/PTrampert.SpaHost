@@ -11,6 +11,8 @@ jobs:
   build-image:
     uses: ./.github/workflows/build-image.yml
     needs: version
+    secrets:
+      DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
     with:
       Version: ${{needs.version.outputs.version}}
       ReleaseStream: ${{needs.version.outputs.release_stream}}

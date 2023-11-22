@@ -1,6 +1,6 @@
 name: Build and Test PR
 on:
-  pull_request:
+  push:
     branches:
       - main
 jobs:

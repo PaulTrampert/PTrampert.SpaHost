@@ -1,6 +1,7 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+LABEL org.opencontainers.image.source="https://github.com/PaulTrampert/PTrampert.SpaHost"
 WORKDIR /app
 ENV ASPNETCORE_HTTP_PORTS=80
 EXPOSE 80

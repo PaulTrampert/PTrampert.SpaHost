@@ -5,7 +5,7 @@ WORKDIR /app
 ENV ASPNETCORE_HTTP_PORTS=80
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY ["PTrampert.SpaHost.SampleApi/PTrampert.SpaHost.SampleApi.csproj", "PTrampert.SpaHost.SampleApi/"]
 RUN dotnet restore "PTrampert.SpaHost.SampleApi/PTrampert.SpaHost.SampleApi.csproj"

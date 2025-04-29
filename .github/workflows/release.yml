@@ -18,10 +18,12 @@ jobs:
       ReleaseStream: ${{needs.version.outputs.release_stream}}
   publish-github-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs: [version, build-image]
     steps:
       - name: Publish GitHub release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

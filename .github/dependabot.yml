@@ -14,7 +14,7 @@ updates:
         patterns:
           - "*" # Matches all C# dependencies
   - package-ecosystem: "npm"
-    directory: "/" # Location of package.json files
+    directory: "/PTrampert.SpaHost/test-client/" # Location of package.json files
     schedule:
       interval: "daily"
     groups:
@@ -22,10 +22,19 @@ updates:
         patterns:
           - "*" # Matches all npm dependencies
   - package-ecosystem: "docker"
-    directory: "/" # Location of Dockerfiles
+    directory: "/PTrampert.SpaHost/" # Location of Dockerfiles
     schedule:
       interval: "daily"
     groups:
-      docker-deps:
+      docker-deps-spahost:
+        patterns:
+          - "*" # Matches all Docker dependencies
+
+  - package-ecosystem: "docker"
+    directory: "/PTrampert.SpaHost.SampleApi/" # Location of Dockerfiles
+    schedule:
+      interval: "daily"
+    groups:
+      docker-deps-spahost-sampleapi:
         patterns:
           - "*" # Matches all Docker dependencies

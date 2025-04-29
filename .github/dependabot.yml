@@ -13,3 +13,19 @@ updates:
       csharp-deps:
         patterns:
           - "*" # Matches all C# dependencies
+  - package-ecosystem: "npm"
+    directory: "/" # Location of package.json files
+    schedule:
+      interval: "daily"
+    groups:
+      npm-deps:
+        patterns:
+          - "*" # Matches all npm dependencies
+  - package-ecosystem: "docker"
+    directory: "/" # Location of Dockerfiles
+    schedule:
+      interval: "daily"
+    groups:
+      docker-deps:
+        patterns:
+          - "*" # Matches all Docker dependencies

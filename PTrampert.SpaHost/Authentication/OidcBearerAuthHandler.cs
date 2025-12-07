@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Headers;
-using Microsoft.AspNetCore.Authentication;
+using Duende.AccessTokenManagement.OpenIdConnect;
 using PTrampert.ApiProxy;
 
 namespace PTrampert.SpaHost.Authentication
@@ -16,7 +16,11 @@ namespace PTrampert.SpaHost.Authentication
         public async Task<AuthenticationHeaderValue> GetAuthenticationHeader()
         {
             var token = await _httpContextAccessor.HttpContext!.GetUserAccessTokenAsync();
-            return new AuthenticationHeaderValue("Bearer", token.AccessToken);
+            if (!token.WasSuccessful(out var userToken))
+            {
+                return null!;
+            }
+            return new AuthenticationHeaderValue("Bearer", token.Token.AccessToken);
         }
     }
 }

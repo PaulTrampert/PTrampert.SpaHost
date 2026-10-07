@@ -21,6 +21,18 @@ updates:
       npm-deps:
         patterns:
           - "*" # Matches all npm dependencies
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - "*" # Matches all npm dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/" # Location of .github/workflows
+    schedule:
+      interval: "daily"
+    groups:
+      actions-deps:
+        patterns:
+          - "*" # Matches all GitHub Actions
   - package-ecosystem: "docker"
     directory: "/PTrampert.SpaHost/" # Location of Dockerfiles
     schedule:

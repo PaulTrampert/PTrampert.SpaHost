@@ -13,9 +13,9 @@ namespace PTrampert.SpaHost.Authentication
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<AuthenticationHeaderValue> GetAuthenticationHeader()
+        public async Task<AuthenticationHeaderValue> GetAuthenticationHeader(CancellationToken cancellationToken)
         {
-            var token = await _httpContextAccessor.HttpContext!.GetUserAccessTokenAsync();
+            var token = await _httpContextAccessor.HttpContext!.GetUserAccessTokenAsync(ct: cancellationToken);
             if (!token.WasSuccessful(out var userToken))
             {
                 return null!;

@@ -91,6 +91,10 @@ Redis is used to store DataProtection keys in clustered scenarios. For productio
 ### ApiProxy
 This configuration section configures proxies to the back-end api's your SPA requires. See https://github.com/PaulTrampert/PTrampert.ApiProxy#readme for details on how to configure your api proxies. All api routes will be exposed to your SPA under the `/api/` base path.
 
+Apis configured with `"AuthType": "PTrampert.SpaHost.Authentication.OidcBearerAuthHandler, PTrampert.SpaHost"` are sent the signed-in user's access token, refreshed as needed. Requests from visitors who have not signed in are proxied without a token. If a signed-in user's token cannot be obtained, typically because their refresh token has expired or been revoked, the request is not proxied: the response is `401` and the user is signed out, so your SPA should send them to `/login?redirectUri=...`.
+
+Errors the proxy raises itself are answered with their status code, such as `404` for an api that is not configured.
+
 ### Serilog
 This project uses Serilog by default. See [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration#serilogsettingsconfiguration--) for detailed configuration instructions.
 

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PTrampert.SpaHost.Configuration;
+using PTrampert.SpaHost.Filters;
 using Serilog;
 using StackExchange.Redis;
 
@@ -60,6 +61,7 @@ try
     }
 
     builder.Services.AddApiProxy(builder.Configuration.GetSection("ApiProxy"));
+    builder.Services.Configure<MvcOptions>(opts => opts.Filters.Add<ProxyExceptionFilter>());
 
     if (authConfig != null)
     {
